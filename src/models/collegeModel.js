@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const collegeModel = mongoose.Schema({
     name: {
-        type: String, unique: true, trim: true    
+        type: String, required:true, unique: true, trim: true   
     },
     fullName: { 
         type: String, required: true, trim: true 
@@ -11,8 +11,7 @@ const collegeModel = mongoose.Schema({
         type: String, required: true 
     },
     isDeleted: { 
-        type: Boolean
-        , default: false 
+        type: Boolean, default: false 
     }
 
 }, { timestamps: true });
