@@ -1,6 +1,5 @@
 const collegeModel = require("../models/collegeModel")
 const internModel = require("../models/internModel")
-const { all } = require("../routes/route")
 
 const keyValid = function (key) {
     if (typeof (key) === "undefined" || typeof (key) === null) return true
