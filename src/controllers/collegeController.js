@@ -1,5 +1,6 @@
 const collegeModel = require("../models/collegeModel")
 const internModel = require("../models/internModel")
+const { all } = require("../routes/route")
 
 const keyValid = function (key) {
     if (typeof (key) === "undefined" || typeof (key) === null) return true
@@ -33,21 +34,31 @@ const createCollege = async function (req, res) {
 }
 
 const getCollegeDetails = async function (req, res) {
-    let collegeName = req.query.collegeName
+    try {
+        let collegeName = req.query.collegeName
 
-    if (!collegeName) return res.status(400).send({ status: false, Message: "Please provide college name" })
-    if (keyValid(collegeName)) return res.status(400).send({ status: false, Message: "College name should be valid" })
+        if (!collegeName) return res.status(400).send({ status: false, Message: "Please provide college name" })
+        if (keyValid(collegeName)) return res.status(400).send({ status: false, Message: "College name should be valid" })
 
-    const isCollegePresent=await collegeModel.findOne({name: collegeName})
-    if(!isCollegePresent) return res.status(400).send({status:false, Message:"No college found with this name"})
-    
-    const collegeIdFromCollege=isCollegePresent._id
+        let isCollegePresent = await collegeModel.findOne({ name: collegeName })
+        if (!isCollegePresent) return res.status(400).send({ status: false, Message: "No college found with this name" })
 
-    let allInterns= await internModel.find({collegeId: collegeIdFromCollege})
-    if(!allInterns) return res.status(400).send({status:false, Message:"No interns are found with this college"})
+        const collegeId = isCollegePresent._id
 
-    res.status(200).send({status:true, Data:allInterns})
+        let allInterns = await internModel.find({ collegeId: collegeId }).select({ _id: 1, email: 1, name: 1, mobile: 1 })
+        if (!allInterns) return res.status(400).send({ status: false, Message: "No interns are found with this college" })
 
+        isCollegePresent = {
+            name: isCollegePresent.name,
+            fullName: isCollegePresent.fullName,
+            logoLink: isCollegePresent.logoLink,
+            interests: allInterns
+        }
+
+        res.status(200).send({ status: true, Data: isCollegePresent })
+    } catch (err) {
+        res.status(500).send({ Error: err.message })
+    }
 }
 
 module.exports = { createCollege, getCollegeDetails }
