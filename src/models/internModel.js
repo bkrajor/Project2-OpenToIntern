@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
 
-const internModel = new mongoose.schema({
+const internModel = new mongoose.Schema({
     name: {
         type: String, required: true, trim: true
     },
@@ -15,7 +15,7 @@ const internModel = new mongoose.schema({
         type: ObjectId, required: true, ref: "college"
     },
     isDeleted: {
-        type: boolean, default: false
+        type: Boolean, default: false
     }
 }, { timestamps: true });
 

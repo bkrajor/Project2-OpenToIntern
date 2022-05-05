@@ -1,5 +1,4 @@
 const collegeModel = require("../models/collegeModel")
-const collegeController = require("../models/collegeModel")
 
 const keyValid = function (key) {
     if (typeof (key) === "undefined" || typeof (key) === null) return true
@@ -10,9 +9,10 @@ const keyValid = function (key) {
 const createCollege = async function (req, res) {
     try {
         let data = req.body
+        
+        if (Object.keys(data).length == 0) return res.status(400).send({ status: false, Message: "Please provide college details" })
+        
         const { name, fullName, logoLink } = data
-
-        if (!Object.keys(data).length > 0) return res.status(400).send({ status: false, Message: "Please provide college details" })
 
         if (keyValid(name)) return res.status(400).send({ status: false, Message: "Name should be valid" })
         if (keyValid(fullName)) return res.status(400).send({ status: false, Message: "Full Name should be valid" })
