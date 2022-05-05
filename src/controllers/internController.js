@@ -21,13 +21,14 @@ const createIntern = async function (req, res) {
         const existingEmail = await internModel.findOne({ email: email })
         if (existingEmail) return res.status(400).send({ status: false, Message: "Email is already exists" })
 
-        if (! /^[6-9]\d{9}$/.test(mobile)) return res.status(400).send({ status: false, message: "Enter a valid mobile number." })
+        if (!/^[6-9]\d{9}$/.test(mobile)) return res.status(400).send({ status: false, message: "Enter a valid mobile number." })
         const existingMobile = await internModel.findOne({ mobile: mobile })
         if (existingMobile) return res.status(400).send({ status: false, Message: "Mobile number is already exists" })
 
         const isCollegePresent = await collageModel.findOne({ name: collegeName })
         if (!isCollegePresent) return res.status(400).send({ status: false, Message: "No college is present with this name" })
         const collegeId = isCollegePresent._id
+        
         data.collegeId=collegeId
 
         let createIntern = await internModel.create(data)
@@ -37,7 +38,5 @@ const createIntern = async function (req, res) {
         res.status(500).send({ status: false, msg: error.message })
     }
 }
-
-
 
 module.exports = { createIntern }
