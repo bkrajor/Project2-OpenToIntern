@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const collegeModel = mongoose.Schema({
+const collegeModel = new mongoose.Schema({
     name: {
         type: String, required:true, unique: true, trim: true   
     },
